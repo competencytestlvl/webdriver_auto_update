@@ -1,0 +1,9 @@
+LICENSE.txt
+README.md
+setup.py
+src/webdriver_auto_update.py
+src/webdriver_auto_update.egg-info/PKG-INFO
+src/webdriver_auto_update.egg-info/SOURCES.txt
+src/webdriver_auto_update.egg-info/dependency_links.txt
+src/webdriver_auto_update.egg-info/requires.txt
+src/webdriver_auto_update.egg-info/top_level.txt

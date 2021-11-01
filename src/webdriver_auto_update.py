@@ -1,8 +1,28 @@
 import os
+from platform import processor, system
 import requests
 import subprocess
 import wget
 import zipfile
+
+
+def get_chromedriver_url(version):
+    base_url = "https://chromedriver.storage.googleapis.com/"
+    if system().startswith('Linux'):
+        platform = 'linux'
+        architecture = '64'
+    elif system() == 'Darwin':
+        platform = 'mac'
+        architecture = '64'
+        if processor() == 'arm':
+            architecture = '64_m1'
+    elif system().startswith('Windows'):
+        platform = 'win'
+        architecture = '32'
+    else:
+        raise RuntimeError(
+            'Could not determine chromedriver download URL for this platform.')
+    return base_url + version + '/chromedriver_' + platform + architecture + '.zip'
 
 
 def download_latest_version(version_number, driver_directory):
@@ -15,7 +35,7 @@ def download_latest_version(version_number, driver_directory):
     :return: None
     """
     print("Attempting to download latest driver online......")
-    download_url = "https://chromedriver.storage.googleapis.com/" + version_number + "/chromedriver_win32.zip"
+    download_url = get_chromedriver_url(version_number)
     print(download_url)
     # Download driver as a zip file to specified folder
     latest_driver_zip = wget.download(download_url, out=driver_directory)

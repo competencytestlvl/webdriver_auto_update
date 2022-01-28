@@ -10,7 +10,6 @@ A program to check existing local chrome driver version and automatically downlo
 1. Download Google Chrome
 2. Pip install Selenium Library
 
-
 ## Installation
 - Make sure you have Python installed in your system.
 - Run the following to install:
@@ -19,16 +18,14 @@ A program to check existing local chrome driver version and automatically downlo
 pip install webdriver-auto-update
 ```
 
-
 ## Example
 ```
 # webdriver_auto_update.py
 from webdriver_auto_update import check_driver
 
-## Make sure to pass in the folder used for storing/downloading chromedriver
-check_driver('folder/path/of/your/chromedriver')
+## Make sure to pass in the folder used for storing/downloading chromedriver executable
+check_driver('directory/to/store/chromedriver')
 ```
-
 
 ## Note
 - The objective of this program is to reduce redundancy of searching and downloading the updated version of chrome driver to the OpenSource community.

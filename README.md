@@ -22,12 +22,11 @@ pip install webdriver-auto-update
 ```
 # webdriver_auto_update.py
 from webdriver_auto_update import check_driver
-
-![webdriver_auto_update_demo](webdriver_auto_update_demo.png)
-
 ## Make sure to pass in the folder used for storing/downloading chromedriver executable
 check_driver('directory/to/store/chromedriver')
 ```
+![webdriver_auto_update_demo](webdriver_auto_update_demo.png)
+
 
 ## Note
 - The objective of this program is to reduce redundancy of searching and downloading the updated version of chrome driver to the OpenSource community.

@@ -3,19 +3,26 @@ import requests
 import subprocess
 import wget
 import zipfile
+import sys
 
 
 def download_latest_version(version_number, driver_directory):
     """Download latest version of chromedriver to a specified directory.
-
     :param driver_directory: Directory to save and download chromedriver.exe into.
     :type driver_directory: str
     :param version_number: Latest chromedriver release from chromedriver.storage.googleapis.com.
     :type version_number: str
     :return: None
     """
+    if sys.platform.startswith('win32'):
+        os_name='win32'
+    elif sys.platform.startswith('linux'):
+        os_name='linux64'
+    elif sys.platform.startswith('darwin'):
+        os_name='mac64'
+        
     print("Attempting to download latest driver online......")
-    download_url = "https://chromedriver.storage.googleapis.com/" + version_number + "/chromedriver_win32.zip"
+    download_url = "https://chromedriver.storage.googleapis.com/" + version_number + "/chromedriver_" + os_name + ".zip"
     print(download_url)
     # Download driver as a zip file to specified folder
     latest_driver_zip = wget.download(download_url, out=driver_directory)
@@ -31,7 +38,6 @@ def download_latest_version(version_number, driver_directory):
 
 def check_driver(driver_directory):
     """Check local chromedriver version and compare it with latest available version online.
-
     :param driver_directory: Directory to store chromedriver.exe. Required to add driver_directory to path before using.
     :type driver_directory: str
     :return: True if chromedriver.exe is already in driver_directory, else chromedriver is automatically downloaded.
@@ -42,6 +48,7 @@ def check_driver(driver_directory):
     online_driver_version = response.text
     try:
         # Executes cmd line entry to check for existing web-driver version locally
+        os.chdir(driver_directory)
         cmd_run = subprocess.run("chromedriver --version",
                                  capture_output=True,
                                  text=True)

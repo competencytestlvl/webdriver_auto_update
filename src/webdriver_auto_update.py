@@ -13,16 +13,9 @@ def download_latest_version(version_number, driver_directory):
     :param version_number: Latest chromedriver release from chromedriver.storage.googleapis.com.
     :type version_number: str
     :return: None
-    """
-    if sys.platform.startswith('win32'):
-        os_name='win32'
-    elif sys.platform.startswith('linux'):
-        os_name='linux64'
-    elif sys.platform.startswith('darwin'):
-        os_name='mac64'
-        
+    """ 
     print("Attempting to download latest driver online......")
-    download_url = "https://chromedriver.storage.googleapis.com/" + version_number + "/chromedriver_" + os_name + ".zip"
+    download_url = "https://chromedriver.storage.googleapis.com/" + version_number + "/chromedriver_" + obtain_os() + ".zip"
     print(download_url)
     # Download driver as a zip file to specified folder
     latest_driver_zip = wget.download(download_url, out=driver_directory)
@@ -52,8 +45,7 @@ def check_driver(driver_directory):
         os.chdir(driver_directory)
         cmd_run = subprocess.run("chromedriver --version",
                                  capture_output=True,
-                                 text=True)
-        
+                                 text=True)     
     except FileNotFoundError:
         os.chdir("..")
         # Handling case if chromedriver not found in path
@@ -68,3 +60,15 @@ def check_driver(driver_directory):
             return True
         else:
             download_latest_version(online_driver_version, driver_directory)
+
+            
+def obtain_os():
+    """Obtains operating system based on chromedriver executable supported by from https://chromedriver.chromium.org/
+    :return: str"""
+    if sys.platform.startswith('win32'):
+        os_name='win32'
+    elif sys.platform.startswith('linux'):
+        os_name='linux64'
+    elif sys.platform.startswith('darwin'):
+        os_name='mac64'
+    return os_name

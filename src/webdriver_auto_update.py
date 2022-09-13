@@ -39,7 +39,6 @@ def check_driver(driver_directory):
     latest_release_url = "https://chromedriver.storage.googleapis.com/LATEST_RELEASE"
     response = requests.get(latest_release_url)
     online_driver_version = response.text
-    path=''
     try:
         # Executes cmd line entry to check for existing web-driver version locally
         os.chdir(driver_directory)

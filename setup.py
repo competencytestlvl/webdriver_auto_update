@@ -5,8 +5,8 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='webdriver_auto_update',
-    version='0.0.3.1',
-    description='Checks local chrome driver version and automatically download the latest available version online',
+    version='0.1.0',
+    description='Checks local ChromeDriver version and automatically download the latest available version online',
     author='Rony Khong',
     author_email='ronykhong77@gmail.com',
     url='https://github.com/competencytestlvl/webdriver_auto_update',
@@ -28,10 +28,10 @@ setup(
         'driver',
         'download',
         'selenium',
+        'update',
         'web',
-        'webdriver',
-        'update'],
+        'webdriver'],
     install_requires=[
         'requests',
         'wget'],
-    )
+)

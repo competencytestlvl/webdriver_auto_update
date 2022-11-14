@@ -19,7 +19,7 @@ def download_latest_version(version_number, driver_directory):
     download_url = "https://chromedriver.storage.googleapis.com/" + version_number + "/chromedriver_" + obtain_os() + ".zip"
     print(download_url)
     # Download driver as a zip file to specified folder
-    latest_driver_zip = wget.download(download_url, out=driver_directory) 
+    latest_driver_zip = wget.download(download_url, out=driver_directory)
     # Read zip file
     with zipfile.ZipFile(latest_driver_zip, 'r') as downloaded_zip:
         # Extract contents from downloaded zip file to specified folder path
@@ -43,8 +43,6 @@ def check_driver(driver_directory):
     Path(driver_directory).mkdir(parents=True, exist_ok=True)
     # Storing base directory for navigation purpose
     base_directory = os.getcwd()
-    
-
     online_driver_version = get_latest_chromedriver_release()
     try:
         # Executes cmd line entry to check for existing web-driver version locally

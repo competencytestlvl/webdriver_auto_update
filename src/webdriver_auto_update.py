@@ -4,6 +4,7 @@ import subprocess
 import wget
 import zipfile
 import sys
+from pathlib import Path
 
 
 def download_latest_version(version_number, driver_directory):
@@ -35,15 +36,24 @@ def check_driver(driver_directory):
     :type driver_directory: str
     :return: True if chromedriver executable is already in driver_directory, else it is automatically downloaded.
     """
+    # Strip '/' and '\' 
+    if (driver_directory[0] == '/' or driver_directory[0] == '\'):
+        driver_directory = driver_directory[1:]
+    # Creating the Directory if it doesn't exits
+    Path(driver_directory).mkdir(parents=True, exist_ok=True)
+    # Storing base directory for navigation purpose
+    base_directory = os.getcwd()
     online_driver_version = get_latest_chromedriver_release()
     try:
         # Executes cmd line entry to check for existing web-driver version locally
         os.chdir(driver_directory)
+        # Turn driver_directory variable to absolute value 
+        driver_directory = os.getcwd()
         cmd_run = subprocess.run("chromedriver --version",
                                  capture_output=True,
-                                 text=True)     
+                                 text=True)   
+        os.chdir(base_directory)  
     except FileNotFoundError:
-        os.chdir("..")
         # Handling case if chromedriver not found in path
         print("No chromedriver executable found in specified path\n")
         download_latest_version(online_driver_version, driver_directory)

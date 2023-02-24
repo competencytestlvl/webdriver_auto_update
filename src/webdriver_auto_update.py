@@ -79,7 +79,7 @@ def get_latest_chromedriver_release():
 def obtain_os():
     """Obtains operating system based on chromedriver supported by from https://chromedriver.chromium.org/
     :return: str"""
-    if sys.platform.startswith('win32'):
+    if sys.platform.startswith('win32') or sys.platform.startswith('cygwin'):
         os_name='win32'
     elif sys.platform.startswith('linux'):
         os_name='linux64'

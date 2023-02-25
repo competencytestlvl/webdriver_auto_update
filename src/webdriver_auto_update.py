@@ -69,7 +69,8 @@ def check_driver(driver_directory):
 
 
 def get_latest_chromedriver_release():
-    """ Check for latest chromedriver release version online"""
+    """ Check for latest chromedriver release version online
+    :return: str"""
     latest_release_url = "https://chromedriver.storage.googleapis.com/LATEST_RELEASE"
     response = requests.get(latest_release_url)
     online_driver_version = response.text
@@ -77,7 +78,7 @@ def get_latest_chromedriver_release():
 
             
 def obtain_os():
-    """Obtains operating system based on chromedriver supported by from https://chromedriver.chromium.org/
+    """Obtains operating system based on chromedriver supported by https://chromedriver.chromium.org/
     :return: str"""
     if sys.platform.startswith('win32') or sys.platform.startswith('cygwin'):
         os_name='win32'

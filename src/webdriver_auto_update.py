@@ -37,7 +37,7 @@ def check_driver(driver_directory):
     :return: True if chromedriver executable is already in driver_directory, else it is automatically downloaded.
     """
     # Strip '/' and '\' 
-    if (driver_directory[0] == '/' or driver_directory[0] == '\'):
+    if (driver_directory[0] == '/' or driver_directory[0] == '\\'):
         driver_directory = driver_directory[1:]
     # Creating the Directory if it doesn't exits
     Path(driver_directory).mkdir(parents=True, exist_ok=True)
@@ -79,7 +79,7 @@ def get_latest_chromedriver_release():
 def obtain_os():
     """Obtains operating system based on chromedriver supported by from https://chromedriver.chromium.org/
     :return: str"""
-    if sys.platform.startswith('win32'):
+    if sys.platform.startswith('win32') or sys.platform.startswith('cygwin'):
         os_name='win32'
     elif sys.platform.startswith('linux'):
         os_name='linux64'

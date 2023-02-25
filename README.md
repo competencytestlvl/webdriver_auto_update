@@ -22,7 +22,7 @@ pip install webdriver-auto-update
 ```
 # webdriver_auto_update.py
 from webdriver_auto_update import check_driver
-## Make sure to pass in the folder used for storing and  downloading chromedriver executable
+## Make sure to pass in the folder used for storing and downloading chromedriver executable
 check_driver('directory/to/store/chromedriver')
 ```
 ![webdriver_auto_update_demo](webdriver_auto_update_demo.png)

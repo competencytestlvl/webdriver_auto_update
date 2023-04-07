@@ -4,6 +4,7 @@ import subprocess
 import wget
 import zipfile
 import sys
+import platform
 from pathlib import Path
 
 
@@ -85,5 +86,5 @@ def obtain_os():
     elif sys.platform.startswith('linux'):
         os_name='linux64'
     elif sys.platform.startswith('darwin'):
-        os_name='mac64'
+        os_name='mac_arm64' if platform.machine() == 'arm64' else 'mac64'
     return os_name

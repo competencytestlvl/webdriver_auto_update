@@ -1,23 +1,26 @@
 import os
+import platform
 import requests
 import subprocess
+import sys
 import wget
 import zipfile
-import sys
-import platform
 from pathlib import Path
 
 
 def download_latest_version(version_number, driver_directory):
-    """Download latest version of chromedriver to a specified directory.
-    :param driver_directory: Directory to save and download chromedriver files into.
-    :type driver_directory: str
-    :param version_number: Latest online chromedriver release from chromedriver.storage.googleapis.com.
-    :type version_number: str
-    :return: None
+    """
+    Download latest version of chromedriver to a specified directory.
+
+    Args:
+        version_number (str): Latest online chromedriver release from chromedriver.storage.googleapis.com.
+        driver_directory (str): Directory to save and download chromedriver files into.
+
+    Returns:
+        None
     """ 
-    print("Attempting to download latest available driver ......")
     download_url = "https://chromedriver.storage.googleapis.com/" + version_number + "/chromedriver_" + obtain_os() + ".zip"
+    print("Attempting to download latest available driver ......")
     print(download_url)
     # Download driver as a zip file to specified folder
     latest_driver_zip = wget.download(download_url, out=driver_directory)
@@ -25,17 +28,21 @@ def download_latest_version(version_number, driver_directory):
     with zipfile.ZipFile(latest_driver_zip, 'r') as downloaded_zip:
         # Extract contents from downloaded zip file to specified folder path
         downloaded_zip.extractall(path=driver_directory)
-        print(f"\nSuccessfully downloaded chromedriver version {version_number} to:\n{driver_directory}")
     # Delete the zip file downloaded
     os.remove(latest_driver_zip)
+    print(f"\nSuccessfully downloaded chromedriver version {version_number} to:\n{driver_directory}")
     return
 
 
 def check_driver(driver_directory):
-    """Check local chromedriver version and compare it with latest available version online.
-    :param driver_directory: Directory to store chromedriver executable. Required to add driver_directory to path before using.
-    :type driver_directory: str
-    :return: True if chromedriver executable is already in driver_directory, else it is automatically downloaded.
+    """
+    Check local chromedriver version and compare it with latest available version online.
+
+    Args:
+        driver_directory (str): Directory to store chromedriver executable. Required to add driver_directory to path before using.
+
+    Returns:
+        bool: True if chromedriver executable is already in driver_directory, else it is automatically downloaded.
     """
     # Strip '/' and '\' 
     if (driver_directory[0] == '/' or driver_directory[0] == '\\'):
@@ -48,43 +55,58 @@ def check_driver(driver_directory):
     try:
         # Executes cmd line entry to check for existing web-driver version locally
         os.chdir(driver_directory)
-        # Turn driver_directory variable to absolute value 
         driver_directory = os.getcwd()
         cmd_run = subprocess.run("chromedriver --version",
                                  capture_output=True,
-                                 text=True)   
+                                 text=True)
+        # Extract local driver version number as string from terminal output
+        local_driver_version = cmd_run.stdout.split()[1]   
         os.chdir(base_directory)  
-    except FileNotFoundError:
-        # Handling case if chromedriver not found in path
+    except (FileNotFoundError, IndexError):
         print("No chromedriver executable found in specified path\n")
         download_latest_version(online_driver_version, driver_directory)
     else:
-        # Extract local driver version number as string from terminal output
-        local_driver_version = cmd_run.stdout.split()[1]
         print(f"Local chromedriver version: {local_driver_version}")
         print(f"Latest online chromedriver version: {online_driver_version}")
         if local_driver_version == online_driver_version:
             return True
-        else:
-            download_latest_version(online_driver_version, driver_directory)
+        # Download the latest version if local driver is outdated
+        download_latest_version(online_driver_version, driver_directory)
 
 
 def get_latest_chromedriver_release():
-    """ Check for latest chromedriver release version online
-    :return: str"""
+    """ 
+    Check for latest chromedriver release version online.
+
+    Returns:
+        str: Latest chromedriver version available for download.
+    """
     latest_release_url = "https://chromedriver.storage.googleapis.com/LATEST_RELEASE"
     response = requests.get(latest_release_url)
-    online_driver_version = response.text
-    return online_driver_version
+    return response.text.strip()
 
             
 def obtain_os():
-    """Obtains operating system based on chromedriver supported by https://chromedriver.chromium.org/
-    :return: str"""
+    """
+    Obtain operating system based on chromedriver supported by https://chromedriver.chromium.org/
+    
+    Returns:
+        str: Operating system identifier string.
+    """
     if sys.platform.startswith('win32') or sys.platform.startswith('cygwin'):
-        os_name='win32'
+        return 'win32'
     elif sys.platform.startswith('linux'):
-        os_name='linux64'
+        return 'linux64'
     elif sys.platform.startswith('darwin'):
-        os_name='mac_arm64' if platform.machine() == 'arm64' else 'mac64'
-    return os_name
+        return 'mac_arm64' if platform.machine() == 'arm64' else 'mac64'
+
+
+def main(driver_directory):
+    """Check if chromedriver is already installed and up to date, otherwise download and install it"""
+    check_driver(driver_directory)
+
+
+if __name__ == '__main__':
+    # Set driver directory to user's home directory
+    driver_directory = str(Path.home())
+    main(driver_directory)

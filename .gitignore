@@ -129,6 +129,10 @@ ENV/
 env.bak/
 venv.bak/
 
+# IDE-specific files and directories
+.idea/
+.history/
+
 # Spyder project settings
 .spyderproject
 .spyproject

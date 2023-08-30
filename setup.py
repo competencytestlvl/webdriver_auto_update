@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='webdriver_auto_update',
-    version='0.1.0',
+    version='1.0.0',
     description='Checks local ChromeDriver version and automatically download the latest available version online',
     author='Rony Khong',
     author_email='ronykhong77@gmail.com',

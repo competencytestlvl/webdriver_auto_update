@@ -1,6 +1,6 @@
 # webdriver_auto_update
 
-A program to check existing local chromedriver version and automatically downloads the latest stable version online.
+A tool for managing ChromeDriver downloads and updates
 
 ## Features
 
@@ -18,23 +18,31 @@ A program to check existing local chromedriver version and automatically downloa
 3. pip install selenium
 4. Additional required packages listed in `requirements.txt`.
 
-### Installation
+### Installation (Option 1)
 
-1. Clone this repository:
-2. Install the required packages:
+1. Clone this repository from GitHub
+2. Install the required package:
 
    ```
-   pip install -r requirements.txt
+   pip install webdriver-auto-update
    ```
 
 ### Usage
 
-1. Open a terminal or command prompt.
-2. Navigate to the directory where you've cloned or downloaded the repository
-3. Run the following command
+1. Navigate to the directory where you've cloned or downloaded the repository
+2. Run the following example
 
    ```
-   python webdriver_auto_update.py
+   from webdriver_auto_update.webdriver_auto_update import WebdriverAutoUpdate
+
+   # Target directory to store chromedriver
+   driver_directory = "/path/to/driver/directory"
+
+   # Create an instance of WebdriverAutoUpdate
+   driver_manager = WebdriverAutoUpdate(driver_directory)
+
+   # Call the main method to manage chromedriver
+   driver_manager.main()
    ```
 
 ### Note

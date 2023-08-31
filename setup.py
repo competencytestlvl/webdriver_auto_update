@@ -6,12 +6,11 @@ with open('README.md', 'r') as fh:
 setup(
     name='webdriver_auto_update',
     version='1.0.0',
-    description='Checks local ChromeDriver version and automatically download the latest available version online',
+    description='A tool for managing ChromeDriver downloads and updates',
     author='Rony Khong',
     author_email='ronykhong77@gmail.com',
     url='https://github.com/competencytestlvl/webdriver_auto_update',
-    py_modules=['webdriver_auto_update'],
-    packages=find_packages(),
+    packages=find_packages(where='src'),
     package_dir={'': 'src'},
     python_requires='>=3.9',
     classifiers=[

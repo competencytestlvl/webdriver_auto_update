@@ -59,7 +59,7 @@ class WebdriverAutoUpdate:
         elif sys.platform.startswith('linux'):
             return 'linux64'
         elif sys.platform.startswith('darwin'):
-            return 'mac_arm64' if platform.machine() == 'arm64' else 'mac64'
+            return 'mac-arm64' if platform.machine() == 'arm64' else 'mac-x64'
 
 
     def get_latest_chromedriver_release(self):

@@ -87,7 +87,7 @@ class WebdriverAutoUpdate:
             downloaded_zip.extractall(path=self.driver_directory)
         os.remove(latest_driver_zip)
         self.transfer_chromedriver_file()
-        print(f"\nSuccessfully downloaded chromedriver version {self.online_driver_version} to:\n{driver_directory}")
+        print(f"\nSuccessfully downloaded chromedriver version {self.online_driver_version} to:\n{self.driver_directory}")
 
 
     def transfer_chromedriver_file(self):
@@ -132,7 +132,7 @@ class WebdriverAutoUpdate:
         """
         try:
             os.chdir(self.driver_directory)
-            cmd_run = subprocess.run("chromedriver --version", capture_output=True, text=True)
+            cmd_run = subprocess.run(args=["chromedriver", "--version"], capture_output=True, text=True)
             local_driver_version = cmd_run.stdout.split()[1]
             os.chdir(self.base_directory)
             return local_driver_version

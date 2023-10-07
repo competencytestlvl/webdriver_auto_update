@@ -20,8 +20,13 @@ A tool for managing ChromeDriver downloads and updates
 
 ### Installation (Option 1)
 
-1. Clone this repository from GitHub
-2. Install the required package:
+   Clone this repository from GitHub
+   ```
+   git clone https://github.com/competencytestlvl/webdriver_auto_update.git
+   ```
+
+### Installation (Option 2)
+   Install the required package from PyPI:
 
    ```
    pip install webdriver-auto-update

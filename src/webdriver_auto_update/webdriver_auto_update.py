@@ -1,5 +1,6 @@
 import os
 import platform
+import re
 import requests
 import shutil
 import subprocess
@@ -74,8 +75,12 @@ class WebdriverAutoUpdate:
         Returns:
             str: The operating system identifier.
         """
-        if sys.platform.startswith('win32') or sys.platform.startswith('cygwin'):
-            return 'win32'
+        bit_architecture = platform.architecture()[0]
+        bit_number = re.findall(r"\d+", bit_architecture)
+        os_bit = bit_number[0] if bit_number else "Unknown"
+
+        if sys.platform.startswith('win') or sys.platform.startswith('cygwin'):
+            return 'win' + os_bit
         elif sys.platform.startswith('darwin'):
             return 'mac-arm64' if platform.machine() == 'arm64' else 'mac-x64'
         elif sys.platform.startswith('linux'):

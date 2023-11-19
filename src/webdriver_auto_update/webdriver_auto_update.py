@@ -77,7 +77,7 @@ class WebdriverAutoUpdate:
         """
         bit_architecture = platform.architecture()[0]
         bit_number = re.findall(r"\d+", bit_architecture)
-        os_bit = bit_number[0] if bit_number else "Unknown"
+        os_bit = bit_number[0] if bit_number else "32"
 
         if sys.platform.startswith('win') or sys.platform.startswith('cygwin'):
             return 'win' + os_bit

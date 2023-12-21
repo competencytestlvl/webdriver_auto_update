@@ -19,6 +19,9 @@ class WebdriverAutoUpdate:
 
     Args:
         driver_directory (str): The directory to store ChromeDriver and its resources.
+        match_chrome_path (str)(optional) : The path to the Chrome executable. 
+            If not specified, the latest version of chromedriver will be downloaded.
+            Otherwise the version of chromedriver that matches the version of chrome installed on the system will be downloaded.
 
     Attributes:
         driver_directory (str): The directory to store ChromeDriver and its resources.
@@ -29,17 +32,21 @@ class WebdriverAutoUpdate:
     Methods:
         check_driver(): Check local ChromeDriver version and update if necessary.
         download_latest_version(): Download the latest version of ChromeDriver.
+        download_matching_version(): Download the version of chromedriver that matches the version of chrome installed on the system.
         get_latest_chromedriver_release(): Get the latest stable ChromeDriver version.
+        get_matching_chromedriver_release(): Get the chrome version number installed on the system.
         get_local_driver_version(): Get the version of locally installed ChromeDriver.
         is_mac(): Determine if the system is a macOS.
         is_unix(): Determine if the system is Windows or a Unix based system.
 
         obtain_os(): Obtain the operating system identifier.
         obtain_os_executable(): Obtain the name of the chromedriver executable.
+        obtain_chrome_version(): Obtain the current version of Chrome installed on the system.
         set_execution_bit_on_chromedriver(): Set execution bit for Unix based system.
         _transfer_chromedriver_file(): Transfer the downloaded ChromeDriver executable.
         _unquarantine_chromedriver(): Delete quarantine attribute for macOS and Linux.
         update_driver(): Update ChromeDriver to the latest version.
+        update_driver_to_match_chrome(): Update ChromeDriver to the version that matches the version of chrome installed on the system.
         main(): The main entry point to manage ChromeDriver.
 
     Usage:
@@ -51,10 +58,13 @@ class WebdriverAutoUpdate:
     CHROMEDRIVER = 'chromedriver' # For Unix-based systems
     CHROMEDRIVER_WIN = 'chromedriver.exe' # For Windows
 
-    def __init__(self, driver_directory:str, quarantine_extended_attribute=None):
+    def __init__(self, driver_directory:str, quarantine_extended_attribute=None, match_chrome_path=None):
         self.driver_directory = str(os.path.abspath(driver_directory))
         self.current_os_platform = self.obtain_os()
-        self.online_driver_version = self.get_latest_chromedriver_release()
+        if match_chrome_version_path is not None:
+            self.online_driver_version = self.get_matching_chromedriver_release(match_chrome_version_path)
+        else:
+            self.online_driver_version = self.get_latest_chromedriver_release()
         self.base_directory = os.path.dirname(os.path.abspath(__file__))
         # Determine the quarantine attribute
         if quarantine_extended_attribute is not None:
@@ -91,7 +101,25 @@ class WebdriverAutoUpdate:
                             "https://googlechromelabs.github.io/chrome-for-testing/.")
             else:
                 return 'linux64'
+        
 
+    def obtain_chrome_version(self, chrome_path):
+        """
+        Obtain the current version of Chrome.
+
+        Params:
+            chrome_path (str): The path to the Chrome executable.
+
+        Returns:
+            str: The latest version of Chrome installed on the system.
+        """
+        dir_path = Path(chrome_path).resolve().parent
+        dirs = os.listdir(dir_path)
+        dirs = [d for d in dirs if re.match(r"\d+\.\d+\.\d+\.\d+", d)]
+        assert len(dirs) >= 1, "Chrome not found!"
+        version = max(dirs)
+        print(f"The Chrome version is {version}")
+        return version
 
     def obtain_os_executable(self):
         """
@@ -142,6 +170,16 @@ class WebdriverAutoUpdate:
         response = requests.get(LAST_KNOWN_GOOD_VERSIONS_URL).json()
         return response["channels"]["Stable"]["version"]
 
+    def get_matching_chromedriver_release(self, chrome_path):
+        """
+        Gets the version of chrome installed on the system.
+
+        Params:
+            chrome_path (str): the path to chrome executable
+        """
+        version : str = self.obtain_chrome_version(chrome_path)
+        return version
+        
 
     def download_latest_version(self):
         """
@@ -159,6 +197,21 @@ class WebdriverAutoUpdate:
         self._transfer_chromedriver_file()
         print(f"\nSuccessfully downloaded chromedriver version {self.online_driver_version} to:\n{self.driver_directory}")
 
+    def download_matching_version(self):
+        """
+        Download the version of chromedriver that matches the version of chrome installed on the system
+
+        Returns:
+            None
+        """
+        download_url = f"{CHROMEDRIVER_BASE_URL}/{self.online_driver_version}/{self.current_os_platform}/chromedriver-{self.current_os_platform}.zip"
+        print(f"Matching driver: {download_url}")
+        latest_driver_zip = wget.download(download_url, out=self.driver_directory)
+        with zipfile.ZipFile(latest_driver_zip, 'r') as downloaded_zip:
+            downloaded_zip.extractall(path=self.driver_directory)
+        os.remove(latest_driver_zip)
+        self._transfer_chromedriver_file()
+        print(f"\nSuccessfully downloaded chromedriver version {self.online_driver_version} to:\n{self.driver_directory}")
 
     def _transfer_chromedriver_file(self):
         """
@@ -263,6 +316,15 @@ class WebdriverAutoUpdate:
         self.download_latest_version()
         print(f"\nSuccessfully updated chromedriver version to {self.online_driver_version}")
 
+    def update_driver_to_match_chrome(self):
+        """
+        Downloads the version of chromedriver that matches the version of chrome installed on the system.
+        
+        Returns:
+            None
+        """
+        self.download_matching_version()
+        print(f"\nSuccessfully updated chromedriver version to {self.online_driver_version}")
 
     def main(self):
         """

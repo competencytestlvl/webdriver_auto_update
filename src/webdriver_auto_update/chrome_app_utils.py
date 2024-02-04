@@ -4,6 +4,23 @@ from sys import platform
 
 
 class ChromeAppUtils:
+    """
+    A utility class for managing Chrome application information.
+
+    Attributes:
+        install_path (str): The default installation path for Chrome based on the platform.
+
+    Methods:
+        __init__(): Initialize ChromeAppUtils.
+        get_default_install_path(): Get the default installation path of Chrome application.
+        get_chrome_version(path: str = None): Obtain the Chrome application version number from a valid directory.
+
+    Usage:
+        chrome_utils = ChromeAppUtils()
+        default_path = chrome_utils.get_default_install_path()
+        version = chrome_utils.get_chrome_version()
+    """
+
     def __init__(self) -> None:
         if platform.startswith("Darwin"):
             self.install_path = "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
@@ -13,7 +30,7 @@ class ChromeAppUtils:
             self.install_path = fr"C:\Program Files\Google\Chrome\Application"
         else:
             raise NotImplemented(f"Unidentified OS: '{platform}'")
-        
+
     def get_default_install_path(self) -> str:
         """
         Default installation path of Chrome application according to platform.
@@ -23,12 +40,15 @@ class ChromeAppUtils:
         """
         return self.install_path
 
-    def get_chrome_version(self, path: str = None):
+    def get_chrome_version(self, path: str = None) -> str:
         """
-        Obtain Chrome application version number in a valid directory.
+        Obtain the Chrome application version number from a valid directory.
+
+        Args:
+            path (str, optional): Path to the Chrome installation directory. Defaults to None.
 
         Returns:
-            str: Version number.
+            str: Version number of Chrome application.
         """
         if path is None:
             path = self.install_path

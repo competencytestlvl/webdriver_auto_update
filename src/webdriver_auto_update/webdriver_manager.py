@@ -10,7 +10,7 @@ import zipfile
 from pathlib import Path
 
 # Constants
-CHROMEDRIVER_BASE_URL = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing"
+CHROMEDRIVER_BASE_URL = "https://storage.googleapis.com/chrome-for-testing-public"
 LAST_KNOWN_GOOD_VERSIONS_URL = "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions.json"
 
 

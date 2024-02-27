@@ -22,7 +22,7 @@ class ChromeAppUtils:
     """
 
     def __init__(self) -> None:
-        if platform.startswith("Darwin"):
+        if platform.startswith("darwin"):
             self.install_path = "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
         elif platform.startswith("linux"):
             self.install_path = "/usr/bin/google-chrome"
